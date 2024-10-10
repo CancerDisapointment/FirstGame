@@ -4,26 +4,43 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    
-    public Rigidbody2D rb;
-    
-    
+    public float moveSpeed = 5f;
+    public float jumpMult;
+    public Transform GroundCheck;
+    private Rigidbody2D rb;
+    private bool onGround;
+    public LayerMask ground;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-            rb.velocity = Vector3.up;
-        if(Input.GetKey(KeyCode.A))
-           rb.velocity = Vector3.left;
-        if(Input.GetKey(KeyCode.D))
-            rb.velocity = Vector3.right;
-           
-           
+
+        onGround = Physics2D.BoxCast(new Vector2(GroundCheck.position.x, GroundCheck.position.y), new Vector2(0.9f, 0.3f), 0f, Vector2.down, 0.9f, ground);
+
+        Debug.Log(onGround);
+
+        if (Input.GetKey(KeyCode.Space) && onGround)
+        {
+            Debug.Log(onGround);
+
+            rb.AddForce(new Vector2(0, jumpMult));
+        }
+
+        float moveInput = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
+
+       
+
+       
+
 
     }
 }
+
+
+
